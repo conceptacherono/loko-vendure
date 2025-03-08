@@ -1,54 +1,59 @@
-// src/components/Cart.tsx
-import React from 'react';
-import { useCart } from '../context/CartContext';
-import styled from 'styled-components';
+import React from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { FiShoppingCart } from "react-icons/fi";
 
-const CartContainer = styled.div`
-  padding: 20px;
-`;
-
-const CartItem = styled.div`
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin: 10px 0;
-`;
-
-const CartButton = styled.button`
-  padding: 10px;
-  background-color: #007bff;
+const NavbarContainer = styled.nav`
+  background-color:rgba(31, 156, 63, 0.91); /* Jungle Green */
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   color: white;
-  border: none;
-  cursor: pointer;
+`;
 
+const Logo = styled.h1`
+  margin: 0;
+  font-size: 1.5rem;
+`;
+
+const NavLinks = styled.div`
+  display: flex;
+  gap: 20px;
+`;
+
+const NavLink = styled(Link)`
+  color: white;
+  text-decoration: none;
+  font-size: 1.2rem;
   &:hover {
-    background-color: #0056b3;
+    text-decoration: underline;
   }
 `;
 
-const Cart = () => {
-  const { cart, removeFromCart } = useCart();
+const CartIcon = styled(FiShoppingCart)`
+  font-size: 1.5rem;
+  cursor: pointer;
+`;
 
-  const total = cart.reduce((acc, product) => acc + parseFloat(product.price), 0);
-
+const Navbar = () => {
   return (
-    <CartContainer>
-      <h1>Your Cart</h1>
-      {cart.length === 0 ? (
-        <p>Your cart is empty!</p>
-      ) : (
-        <div>
-          {cart.map((product) => (
-            <CartItem key={product.id}>
-              <h2>{product.name}</h2>
-              <p>Price: ${product.price}</p>
-              <CartButton onClick={() => removeFromCart(product.id)}>Remove from Cart</CartButton>
-            </CartItem>
-          ))}
-          <h2>Total: ${total.toFixed(2)}</h2>
-        </div>
-      )}
-    </CartContainer>
+    <NavbarContainer>
+      <Logo>LokoStore</Logo>
+      <NavLinks>
+        <NavLink to="/">Home</NavLink>
+        <NavLink to="/shop">Shop</NavLink>
+        <NavLink to="/about">About</NavLink>
+        <NavLink to="/contact">Contact</NavLink>
+      </NavLinks>
+      <NavLinks>
+        <NavLink to="/cart">
+          <CartIcon />
+        </NavLink>
+        <NavLink to="/login">Login</NavLink>
+      </NavLinks>
+    </NavbarContainer>
   );
 };
 
-export default Cart;
+export default Navbar;

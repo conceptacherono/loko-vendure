@@ -1,7 +1,6 @@
-// src/components/Cart.tsx
-import React from 'react';
-import { useCart } from '../context/CartContext';
-import styled from 'styled-components';
+import React from "react";
+import { useCart } from "../context/CartContext";
+import styled from "styled-components";
 
 const CartContainer = styled.div`
   padding: 20px;
@@ -27,8 +26,7 @@ const CartButton = styled.button`
 
 const Cart = () => {
   const { cart, removeFromCart } = useCart();
-
-  const total = cart.reduce((acc, product) => acc + parseFloat(product.price), 0);
+  const total = cart.reduce((acc, product) => acc + product.price, 0);
 
   return (
     <CartContainer>
@@ -40,8 +38,8 @@ const Cart = () => {
           {cart.map((product) => (
             <CartItem key={product.id}>
               <h2>{product.name}</h2>
-              <p>Price: ${product.price}</p>
-              <CartButton onClick={() => removeFromCart(product.id)}>Remove from Cart</CartButton>
+              <p>Price: ${product.price.toFixed(2)}</p>
+              <CartButton onClick={() => removeFromCart(product.id)}>Remove</CartButton>
             </CartItem>
           ))}
           <h2>Total: ${total.toFixed(2)}</h2>

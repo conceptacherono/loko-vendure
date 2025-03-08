@@ -4,10 +4,10 @@ import styled from 'styled-components';
 const FooterContainer = styled.footer`
   background-color: #333;
   color: white;
-  padding: 20px;
   text-align: center;
+  padding: 15px;
+  font-size: 0.9rem;
 `;
-
 const Footer = () => {
   return (
     <FooterContainer>
