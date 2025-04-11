@@ -1,5 +1,7 @@
-import { VendureConfig, DefaultJobQueuePlugin, DefaultSearchPlugin } from '@vendure/core';
+import path from 'path';
+import {VendureConfig,DefaultJobQueuePlugin,DefaultSearchPlugin,} from '@vendure/core';
 import { AdminUiPlugin } from '@vendure/admin-ui-plugin';
+import { AssetServerPlugin } from '@vendure/asset-server-plugin';
 
 export const config: VendureConfig = {
   apiOptions: {
@@ -7,17 +9,17 @@ export const config: VendureConfig = {
     adminApiPath: 'admin-api',
     shopApiPath: 'shop-api',
     cors: {
-        origin: ['http://localhost:5173'], 
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        credentials: true,
-      },
+      origin: ['http://localhost:5173'],
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      credentials: true,
+    },
   },
   authOptions: {
-    tokenMethod: 'cookie', 
+    tokenMethod: 'cookie',
     cookieOptions: {
-      secret: 'your-secret-key', 
+      secret: 'your-secret-key',
     },
-    requireVerification: false, // for now
+    requireVerification: false,
   },
   dbConnectionOptions: {
     type: 'sqlite',
@@ -25,14 +27,18 @@ export const config: VendureConfig = {
     synchronize: true,
   },
   paymentOptions: {
-    paymentMethodHandlers: [], 
+    paymentMethodHandlers: [],
   },
   plugins: [
+    AssetServerPlugin.init({
+      route: 'assets',
+      assetUploadDir: path.join(__dirname, '../static/assets'),
+    }),
     DefaultJobQueuePlugin,
     DefaultSearchPlugin,
     AdminUiPlugin.init({
       route: 'admin',
-      port: 3001, 
+      port: 3001,
     }),
   ],
 };

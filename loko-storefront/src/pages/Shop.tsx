@@ -1,66 +1,54 @@
-import React from 'react';
-import { useQuery } from '@apollo/client';
-import { GET_PRODUCTS } from '../graphql/queries';
-import { useEffect, useState } from 'react';
+import { useQuery } from "@apollo/client";
+import { GET_PRODUCTS } from "../graphql/getProducts";
+import styled from "styled-components";
+import ProductCard from "../components/ProductCard";
+
+const ShopContainer = styled.div`
+  padding: 20px;
+`;
+
+// const ProductCard = styled.div`
+//   border: 1px solid #ddd;
+//   padding: 10px;
+//   margin: 10px;
+//   border-radius: 4px;
+// `;
+
+const ProductGrid = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+`;
 
 const Shop = () => {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    fetch("http://localhost:3000/shop-api", {
-      method: "POST",
+  const { loading, error, data } = useQuery(GET_PRODUCTS, {
+    context: {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        query: `
-          query {
-            products {
-              items {
-                id
-                name
-                description
-                variants {
-                  id
-                  price
-                }
-              }
-            }
-          }
-        `,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Fetched products:", data); // ✅ Logging products to console
-        if (data.data && data.data.products) {
-          setProducts(data.data.products.items);
-        }
-      })
-      .catch((error) => console.error("Error fetching products:", error));
-  }, []);
+    },
+  });
+
+  // For debugging:
+  console.log("Fetched products:", data);
+
+  if (loading) return <p>Loading products...</p>;
+  if (error) return <p>Error fetching products: {error.message}</p>;
 
   return (
-    <div>
+    <ShopContainer>
       <h1>Shop</h1>
-      <ul>
-        {products.length > 0 ? (
-          products.map((product) => (
-            <li key={product.id}>
-              <h3>{product.name}</h3>
-              <p>{product.description}</p>
-              {product.variants.length > 0 ? (
-                <p>Price: {product.variants[0].price / 100} USD</p>
-              ) : (
-                <p>No price available</p>
-              )}
-            </li>
+      <ProductGrid>
+        {data.products && data.products.items.length > 0 ? (
+          data.products.items.map((product: any) => (
+            <ProductCard key={product.id} product={product} addToCart={() => {}} />
           ))
         ) : (
-          <p>Loading products...</p>
+          <p>No products found.</p>
         )}
-      </ul>
-    </div>
+      </ProductGrid>
+    </ShopContainer>
   );
 };
 

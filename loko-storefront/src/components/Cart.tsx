@@ -38,11 +38,11 @@ const Cart = () => {
           {cart.map((product) => (
             <CartItem key={product.id}>
               <h2>{product.name}</h2>
-              <p>Price: ${product.price.toFixed(2)}</p>
+              <p>Price: ${(product.price/100).toFixed(2)}</p>
               <CartButton onClick={() => removeFromCart(product.id)}>Remove</CartButton>
             </CartItem>
           ))}
-          <h2>Total: ${total.toFixed(2)}</h2>
+          <h2>Total: ${(total/100).toFixed(2)}</h2>
         </div>
       )}
     </CartContainer>

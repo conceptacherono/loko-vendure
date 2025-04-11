@@ -1,4 +1,3 @@
-// src/components/ProductCard.tsx
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
@@ -10,6 +9,14 @@ const Card = styled.div`
   text-align: center;
   border-radius: 8px;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+`;
+
+const ProductImage = styled.img`
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 10px;
 `;
 
 const Button = styled.button`
@@ -28,12 +35,17 @@ const Button = styled.button`
 const ProductCard = ({ product, addToCart }) => {
   return (
     <Card>
+      {product.featuredAsset?.preview && (
+        <ProductImage
+          src={product.featuredAsset.preview}
+          alt={product.name}
+        />
+      )}
       <h3>{product.name}</h3>
-      <p>${product.price}</p>
+      <p>${(product.variants?.[0]?.price / 100).toFixed(2) || "N/A"}</p>
       <Link to={`/product/${product.slug}`}>
         <Button>View Details</Button>
       </Link>
-      <Button onClick={() => addToCart(product)}>Add to Cart</Button>
     </Card>
   );
 };
